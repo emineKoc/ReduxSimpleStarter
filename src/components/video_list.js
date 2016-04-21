@@ -5,7 +5,10 @@ import VideoListItem from './video_list_item';
 
 const VideoList = (props) => {
   const videoItems = props.videos.map( (video)=> {
-    return <VideoListItem key = {video.etag} video = {video} />
+    return <VideoListItem
+    onVideoSelect = {props.onVideoSelect}
+    key = {video.etag}
+    video = {video} />
 });
 // when ever we render a list of array, React wants us to pass a key.
   return (

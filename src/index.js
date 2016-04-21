@@ -5,6 +5,7 @@ import YTSearch  from 'youtube-api-search'; // npm package
 
 import SearchBar from './components/search_bar.js';
 import VideoList from './components/video_list.js';
+import VideoDetail from './components/video_details';
 
 
 const API_KEY = 'AIzaSyBW6oEaN0LZ5yskQduo0BPAm6cWhRAhG_c'; // youtube api
@@ -16,10 +17,18 @@ class App extends Component {  // const means this will never change! We can nev
   constructor(props){
     super(props);
 
-    this.state = { videos:[] };
+    this.state = {
+      videos:[],
+      selectedVideo: null
+    };
+    this.videoSearch('surfboards')
 
-    YTSearch({ key:API_KEY , term: 'surfboards'}, (videos) => {
-      this.setState({ videos });
+  }
+  videoSearch(term){
+    YTSearch({ key:API_KEY , term: term}, (videos) => {
+      this.setState({
+        videos        : videos,
+        selectedVideo : videos[0] });
       //same thing like this.setState({videos: videos }) because key and value are same;
     });
   }
@@ -27,8 +36,11 @@ class App extends Component {  // const means this will never change! We can nev
   render() {
     return (
       <div>
-      <SearchBar />
-      <VideoList  videos = {this.state.videos}/>
+      <SearchBar onSearchTermChange = { term => this.videoSearch(term)}/>
+      <VideoDetail video = {this.state.selectedVideo}/>
+      <VideoList
+          onVideoSelect = { selectedVideo => this.setState({selectedVideo}) }
+          videos = {this.state.videos}/>
       </div>
     )
   }
