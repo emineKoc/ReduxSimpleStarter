@@ -2,6 +2,7 @@
 import React, { Component } from 'react'; // other way: const React = require('react')
 import ReactDOM from 'react-dom'; // React DOM library knows how to render the JSX to DOM tree.
 import YTSearch  from 'youtube-api-search'; // npm package
+import _ from 'lodash'; // npm package
 
 import SearchBar from './components/search_bar.js';
 import VideoList from './components/video_list.js';
@@ -28,12 +29,14 @@ class App extends Component {  // const means this will never change! We can nev
     YTSearch({ key:API_KEY , term: term}, (videos) => {
       this.setState({
         videos        : videos,
-        selectedVideo : videos[0] });
+        selectedVideo : videos[0]
+      });
       //same thing like this.setState({videos: videos }) because key and value are same;
     });
   }
 
   render() {
+    const videoSearch = _.debounce((term)=> { this.videoSearch(term)},300)  // our seach will wait every 3 miliseconds.
     return (
       <div>
       <SearchBar onSearchTermChange = { term => this.videoSearch(term)}/>
